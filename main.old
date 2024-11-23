@@ -1,0 +1,70 @@
+package main
+
+import (
+	"fmt"
+	castai "hackerrank-go-ra/castai"
+	dp "hackerrank-go-ra/dp"
+	h "hackerrank-go-ra/hackerrank"
+	leetcode "hackerrank-go-ra/leetcode"
+)
+
+func main() {
+	// palindrome
+	var a = "asdsa"
+	fmt.Println(h.Palindrome(a))
+
+	// backtracking permutations
+	var x = []int32{1, 2, 3}
+	h.Permutations(0, x, len(x))
+
+	// factory
+	leveFactory, _ := dp.GetPillFactory("Leve")
+	leve := leveFactory.MakePill()
+	fmt.Println(leve.GetName(), leve.GetPrice())
+
+	// decorator
+	car := &dp.Skoda{}
+	carChoseColor := &dp.ChoseMirrors{
+		Car: car,
+	}
+	fmt.Println("Car with chsoen color price:", carChoseColor.GetPrice())
+
+	// joint union
+	individuals := []string{"a", "b", "c", "d", "e", "f", "g", "h"}
+	individualsChecked := map[string]bool{}
+	relations := [][]string{
+		[]string{"a", "b"},
+		[]string{"b", "d"},
+		[]string{"c", "f"},
+		[]string{"c", "i"},
+		[]string{"j", "e"},
+		[]string{"g", "j"},
+	}
+	groups := []h.Group{}
+	for _, individual := range individuals {
+		if individualsChecked[individual] {
+			continue
+		}
+		var g h.Group = h.Group{}
+		g.AddMember(individual)
+		individualsChecked[individual] = true
+		for _, rel := range relations {
+			if rel[0] == individual {
+				g.AddMember(rel[1])
+				individualsChecked[rel[1]] = true
+			} else if rel[1] == individual {
+				g.AddMember(rel[0])
+				individualsChecked[rel[0]] = true
+			}
+		}
+		groups = append(groups, g)
+	}
+
+	for _, g := range groups {
+		g.ListMembers()
+	}
+
+	//castai
+	castai.Solve("Problem")
+	leetcode.ZigZagConvert("PAYPALISHIRING", 4)
+}
